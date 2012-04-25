@@ -19,6 +19,6 @@ class postfix {
   service { 'postfix':
     ensure => running,
     hasstatus => true,
-    enabled => true,
+    enable => true,
   }
 }
