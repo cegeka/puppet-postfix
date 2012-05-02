@@ -1,0 +1,34 @@
+myhostname = <%= hostname %>
+mydomain = $myhostname
+myorigin = $mydomain
+mynetworks = 127.0.0.0/8
+
+mydestination = $myhostname, localhost.$mydomain, localhost
+smtpd_banner = $myhostname ESMTP $mail_name
+
+relayhost = [<%= relayer %>]
+
+inet_interfaces = localhost
+inet_protocols = all
+message_size_limit = 20971520
+
+mail_owner = postfix
+setgid_group = postdrop
+
+delay_warning_time = 4h
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+
+html_directory = no
+sendmail_path = /usr/sbin/sendmail.postfix
+newaliases_path = /usr/bin/newaliases.postfix
+mailq_path = /usr/bin/mailq.postfix
+manpage_directory = /usr/share/man
+sample_directory = /usr/share/doc/postfix-2.6.6/samples
+readme_directory = /usr/share/doc/postfix-2.6.6/README_FILES
+unknown_local_recipient_reject_code = 550
