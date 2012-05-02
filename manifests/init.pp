@@ -13,7 +13,7 @@
 # [Remember: No empty lines between comments and class definition]
 class postfix($relayer = undef) {
   if ! $relayer {
-    $relayer = 'smtp.foo.bar'
+    fail('Please provide an smtp relayer.')
   }
   $hostname = $::fqdn
 
