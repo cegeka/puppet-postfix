@@ -11,14 +11,24 @@
 # Sample Usage:
 #
 # [Remember: No empty lines between comments and class definition]
-class postfix {
+class postfix($relayer = undef) {
+  if ! $relayer {
+    fail('Please provide an smtp relayer.')
+  }
+  $hostname = $::fqdn
+
   package { 'postfix':
     ensure => installed,
   }
 
   service { 'postfix':
-    ensure => running,
+    ensure    => running,
     hasstatus => true,
-    enable => true,
+    enable    => true,
+    subscribe => File['/etc/postfix/main.cf'],
+  }
+
+  file { '/etc/postfix/main.cf':
+    source => template('postfix/main.cf.erb'),
   }
 }
