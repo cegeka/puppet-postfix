@@ -1,1 +1,3 @@
-include postfix
+class { 'postfix':
+  relayer => 'dummy.isp.tld'
+}
