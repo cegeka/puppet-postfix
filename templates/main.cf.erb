@@ -1,13 +1,12 @@
-smtpd_banner = $myhostname ESMTP $mail_name
 myhostname = <%= hostname %>
 mydomain = $myhostname
 myorigin = $mydomain
-mydestination = $myhostname, localhost.$mydomain, localhost
-
 mynetworks = 127.0.0.0/8
-mydestination = $myhostname, localhost.$mydomain, localhost
 
-relayhost = [<%= relayer %>
+mydestination = $myhostname, localhost.$mydomain, localhost
+smtpd_banner = $myhostname ESMTP $mail_name
+
+relayhost = [<%= relayer %>]
 
 inet_interfaces = localhost
 inet_protocols = all
