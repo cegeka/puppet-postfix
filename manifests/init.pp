@@ -9,13 +9,20 @@
 # Requires:
 #
 # Sample Usage:
+# include postfix
+# postfix::conf { relayer => "smtp.isp.tld" }
 #
 # [Remember: No empty lines between comments and class definition]
-class postfix($relayer = undef) {
+class postfix($relayer) {
   if ! $relayer {
-    fail('Please provide an smtp relayer.')
+    $relayer = ' '
   }
+
   $hostname = $::fqdn
+
+  file { '/etc/postfix/main.cf':
+    content => template('postfix/main.cf.erb'),
+  }
 
   package { 'postfix':
     ensure => installed,
@@ -26,9 +33,5 @@ class postfix($relayer = undef) {
     hasstatus => true,
     enable    => true,
     subscribe => File['/etc/postfix/main.cf'],
-  }
-
-  file { '/etc/postfix/main.cf':
-    source => template('postfix/main.cf.erb'),
   }
 }
