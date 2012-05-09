@@ -10,7 +10,7 @@
 #
 # Sample Usage:
 # class { 'postfix':
-#   relayer => "smtp.isp.tld", 
+#   relayer => "smtp.isp.tld",
 # }
 #
 # [Remember: No empty lines between comments and class definition]
