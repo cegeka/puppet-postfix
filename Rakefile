@@ -2,6 +2,10 @@ require 'rubygems'
 require 'rake/clean'
 require 'rspec/core/rake_task'
 
+$:.unshift(File.join(File.dirname(__FILE__), 'build'))
+require 'rpm_packager'
+require 'deb_packager'
+
 CLEAN.include("")
 CLOBBER.include("target")
 
@@ -112,8 +116,9 @@ desc "Create RPM package from puppet module."
 task :rpm do
   puts "Creating RPM package from puppet module..."
   module_name = ENV["JOB_NAME"].split('-')[1]
-  rpmbuild = Packager.new
-  output = rpmbuild.build("rpm", module_name)
+
+  rpm_packager = RpmPackager.new
+  output = rpm_packager.build(module_name)
   puts output
 end
   
@@ -121,8 +126,9 @@ desc "Create DEB package from puppet module."
 task :deb do
   puts "Creating DEB package from puppet module..."
   module_name = ENV["JOB_NAME"].split('-')[1]
-  debbuild = Packager.new
-  output = debbuild.build("deb", module_name)
+  
+  deb_packager = DebPackager.new
+  output = deb_packager.build(module_name)
   puts output
 end
 
@@ -152,48 +158,6 @@ task :release, [:version] => [:tag] do |t,args|
   # checkout tag / build rpm/deb/forge package
 end
 
-class Packager
-  begin
-    require 'fpm'
-    require 'fpm/program'
-  rescue LoadError
-    fail 'Cannot load fpm, did you install it?'
-  end
-
-  def build(package_type, module_name)
-    basedirectory = ENV["WORKSPACE"]
-    version = "0.01"
-    iteration = "1"
-    packagename = "cegeka-puppet-#{module_name}"
-    case package_type
-    when "rpm"
-      delimitera = "-"
-      delimiterb = "."
-      architecture = "noarch"
-    when "deb"
-      delimitera = "_"
-      delimiterb = "_"
-      architecture = "all"
-    end
-    destinationfile = "#{packagename}#{delimitera}#{version}-#{iteration}#{delimiterb}#{architecture}.#{package_type}"
-    destinationfolder = "#{basedirectory}/#{module_name}/target/dist"
-    url = "https://github.com/cegeka/puppet-#{module_name}"
-    description = "Puppet module: #{module_name} by Cegeka\nModule #{module_name} description goes here."
-    staticarguments = ["-t", package_type, "-s", "dir", "-x", ".git", "-a", architecture, "-m", "Cegeka <computing@cegeka.be>", "--prefix", "/etc/puppet/modules"]
-    vararguments = ["-n", packagename, "-v", version, "--iteration", iteration, "--url", url, "--description", description, "-C", basedirectory, module_name]
-    arguments = staticarguments | vararguments
-  	
-    tmpdir = Dir.mktmpdir
-    Dir.chdir tmpdir
-    FileUtils.mkpath destinationfolder
-    packagebuild = FPM::Program.new
-    ret = packagebuild.run(arguments)
-    FileUtils.mv("#{tmpdir}/#{destinationfile}","#{destinationfolder}/#{destinationfile}")
-    FileUtils.remove_entry_secure(tmpdir)
-    return "Created #{destinationfolder}/#{destinationfile}"
-  end
-end
-
 namespace "jenkins" do
   begin
     require 'ci/reporter/rake/rspec'
@@ -219,5 +183,22 @@ namespace "jenkins" do
     FileUtils.mkdir_p(ACCEPTANCE_REPORTS_PATH)
     
     Rake::Task[:acceptance].invoke
+  end
+
+  desc "Archive job configuration in YAML format."
+  task :archive_job_configuration do
+    dist_dir = "target/dist"
+
+    module_name = ENV["JOB_NAME"]
+    git_commit = ENV["GIT_COMMIT"]
+    
+    if !git_commit.nil? and !git_commit.empty?
+      puts "Saving #{module_name}.yaml file" 
+      FileUtils.mkdir_p(dist_dir)
+      open("target/dist/#{module_name}.yaml", "w") { |file|
+	file.puts "module_name: #{module_name}"
+	file.puts "git_commit: #{git_commit}"
+      }
+    end
   end
 end
