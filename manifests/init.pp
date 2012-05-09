@@ -9,8 +9,9 @@
 # Requires:
 #
 # Sample Usage:
-# include postfix
-# postfix::conf { relayer => "smtp.isp.tld" }
+# class { 'postfix':
+#   relayer => "smtp.isp.tld", 
+# }
 #
 # [Remember: No empty lines between comments and class definition]
 class postfix($relayer) {
