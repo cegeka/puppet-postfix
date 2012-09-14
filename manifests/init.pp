@@ -22,7 +22,9 @@ class postfix($relayer) {
   $hostname = $::fqdn
 
   file { '/etc/postfix/main.cf':
+    ensure  => present,
     content => template('postfix/main.cf.erb'),
+    require => Package['postfix']
   }
 
   package { 'postfix':
