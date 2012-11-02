@@ -14,7 +14,10 @@
 # }
 #
 # [Remember: No empty lines between comments and class definition]
-class postfix($relayer) {
+class postfix($relayer,$option=undef) {
+
+  include postfix::params
+
   if ! $relayer {
     $relayer = ' '
   }

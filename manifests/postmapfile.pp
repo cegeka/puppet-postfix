@@ -12,7 +12,7 @@ define postfix::postmapfile($options=undef){
   file { "/etc/postfix/${name}":
     ensure  => present,
     mode    => '0644',
-    content => template("postfix/postmapfile.erb"),
+    content => template('postfix/postmapfile.erb'),
     require => Package['postfix'],
     notify  => Exec["postmap${name}"],
   }
