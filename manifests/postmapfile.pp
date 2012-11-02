@@ -8,6 +8,7 @@ define postfix::postmapfile($options=undef){
       File["/etc/postfix/${name}"],
       Package['postfix']
     ],
+    notify      => Service['postfix'],
   }
   file { "/etc/postfix/${name}":
     ensure  => present,
