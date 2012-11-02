@@ -32,3 +32,4 @@ manpage_directory = /usr/share/man
 sample_directory = /usr/share/doc/postfix-2.6.6/samples
 readme_directory = /usr/share/doc/postfix-2.6.6/README_FILES
 unknown_local_recipient_reject_code = 550
+smtpd_recipient_restrictions = check_recipient_access hash:/etc/postfix/recipient_access, reject_unauth_destination
