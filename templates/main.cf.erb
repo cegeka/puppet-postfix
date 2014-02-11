@@ -1,4 +1,4 @@
-myhostname = <%= hostname %>
+myhostname = <%= @hostname %>
 mydomain = $myhostname
 myorigin = $mydomain
 mynetworks = 127.0.0.0/8
@@ -6,7 +6,7 @@ mynetworks = 127.0.0.0/8
 mydestination = $myhostname, localhost.$mydomain, localhost
 smtpd_banner = $myhostname ESMTP $mail_name
 
-relayhost = [<%= relayer %>]
+relayhost = [<%= @relayer %>]
 
 inet_interfaces = localhost
 inet_protocols = all
