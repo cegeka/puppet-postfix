@@ -1,3 +1,1 @@
-class { 'postfix': 
-  relayer => 'smtp.cegeka.be'
-}
+class { 'postfix': }
