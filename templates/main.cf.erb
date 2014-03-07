@@ -6,7 +6,7 @@ mynetworks = 127.0.0.0/8
 mydestination = $myhostname, localhost.$mydomain, localhost
 smtpd_banner = $myhostname ESMTP $mail_name
 
-relayhost = [<%= relayer %>]
+relayhost = <%= relayhost %>
 
 inet_interfaces = localhost
 inet_protocols = all
