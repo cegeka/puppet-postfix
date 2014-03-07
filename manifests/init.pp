@@ -14,12 +14,14 @@
 # }
 #
 # [Remember: No empty lines between comments and class definition]
-class postfix($relayer,$options=undef) {
+class postfix($relayer='',$options=undef) {
 
   include postfix::params
 
-  if ! $relayer {
-    $relayer = ' '
+  if $relayer != '' {
+    $relayhost = "[${relayer}]"
+  } else {
+    $relayhost = ''
   }
 
   $hostname = $::fqdn
