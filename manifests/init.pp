@@ -14,22 +14,30 @@
 # }
 #
 # [Remember: No empty lines between comments and class definition]
-class postfix($relayer='',$options=undef) {
+class postfix($relayer='',$options=undef, $auto_generate_config=true) {
 
   include postfix::params
 
-  if $relayer != '' {
-    $relayhost = "[${relayer}]"
-  } else {
-    $relayhost = ''
-  }
+  if ($auto_generate_config == true) {
+    if $relayer != '' {
+      $relayhost = "[${relayer}]"
+    } else {
+      $relayhost = ''
+    }
 
-  $hostname = $::fqdn
+    $hostname = $::fqdn
 
-  file { '/etc/postfix/main.cf':
-    ensure  => present,
-    content => template('postfix/main.cf.erb'),
-    require => Package['postfix']
+    file { '/etc/postfix/main.cf':
+      ensure  => present,
+      content => template('postfix/main.cf.erb'),
+      require => Package['postfix']
+    }
+  }else{
+    file { '/etc/postfix/main.cf':
+      ensure  => present,
+      source  => 'puppet:///private-dev/postfix/main.cf',
+      require => Package['postfix']
+    }
   }
 
   package { 'postfix':
