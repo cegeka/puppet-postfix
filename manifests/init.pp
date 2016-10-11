@@ -35,7 +35,7 @@ class postfix($relayer='',$options=undef, $auto_generate_config=true) {
   }else{
     file { '/etc/postfix/main.cf':
       ensure  => present,
-      source  => "puppet:///private-${customerenv}/postfix/main.cf",
+      source  => "puppet:///private-$::customerenv/postfix/main.cf",
       require => Package['postfix']
     }
   }
