@@ -3,3 +3,4 @@
 {<img src='https://jenkins-iac.cegeka.be/job/puppet-postfix/badge/icon' />}[https://jenkins-iac.cegeka.be/job/puppet-postfix/]
 
 This is the postfix module.
+
