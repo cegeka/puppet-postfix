@@ -8,7 +8,7 @@ smtpd_banner = $myhostname ESMTP $mail_name
 
 relayhost = <%= @relayhost %>
 
-inet_interfaces = localhost
+inet_interfaces = <%= @inet_interfaces %>
 inet_protocols = all
 message_size_limit = 20971520
 

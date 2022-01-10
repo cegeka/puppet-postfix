@@ -14,7 +14,12 @@
 # }
 #
 # [Remember: No empty lines between comments and class definition]
-class postfix($relayer='',$options=undef, $auto_generate_config=true) {
+class postfix(
+  $relayer='',
+  $options=undef,
+  $inet_interfaces='localhost',
+  $auto_generate_config=true
+) {
 
   include postfix::params
 
